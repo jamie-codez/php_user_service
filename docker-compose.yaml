@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  user_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8001:80"
+    depends_on:
+      - mysql_db
+    networks:
+      - user_network
+
+  mysql_db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: secret123
+      MYSQL_DATABASE: user_db
+      MYSQL_USER: jamie
+      MYSQL_PASSWORD: jamie123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  src:
+  mysql_data:
+
+networks:
+  user_network:
+    driver: bridge
